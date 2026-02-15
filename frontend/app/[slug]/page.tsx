@@ -1,10 +1,8 @@
 import type {Metadata} from 'next'
-import Head from 'next/head'
 
 import PageBuilderPage from '@/app/components/PageBuilder'
 import {sanityFetch} from '@/sanity/lib/live'
 import {getPageQuery, pagesSlugs} from '@/sanity/lib/queries'
-import {GetPageQueryResult} from '@/sanity.types'
 import {PageOnboarding} from '@/app/components/Onboarding'
 
 type Props = {
@@ -58,9 +56,6 @@ export default async function Page(props: Props) {
 
   return (
     <div className="my-12 lg:my-24">
-      <Head>
-        <title>{page.heading}</title>
-      </Head>
       <div className="">
         <div className="container">
           <div className="pb-6 border-b border-gray-100">
@@ -73,7 +68,7 @@ export default async function Page(props: Props) {
           </div>
         </div>
       </div>
-      <PageBuilderPage page={page as GetPageQueryResult} />
+      <PageBuilderPage page={page} />
     </div>
   )
 }

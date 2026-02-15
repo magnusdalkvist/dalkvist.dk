@@ -67,6 +67,45 @@ export type InfoSection = {
   content?: BlockContent
 }
 
+export type RecentPosts = {
+  _type: 'recentPosts'
+  heading?: string
+  subheading?: string
+  limit?: number
+}
+
+export type ImageGallery = {
+  _type: 'imageGallery'
+  heading?: string
+  subheading?: string
+  images?: Array<{
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    caption?: string
+    _type: 'image'
+    _key: string
+  }>
+  columns?: 2 | 3 | 4
+}
+
+export type Hero = {
+  _type: 'hero'
+  heading: string
+  subheading?: string
+  image?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  button?: Button
+}
+
 export type BlockContentTextOnly = Array<{
   children?: Array<{
     marks?: Array<string>
@@ -123,6 +162,32 @@ export type Button = {
   _type: 'button'
   buttonText?: string
   link?: Link
+}
+
+export type Homepage = {
+  _id: string
+  _type: 'homepage'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title: string
+  pageBuilder?: Array<
+    | ({
+        _key: string
+      } & Hero)
+    | ({
+        _key: string
+      } & ImageGallery)
+    | ({
+        _key: string
+      } & RecentPosts)
+    | ({
+        _key: string
+      } & CallToAction)
+    | ({
+        _key: string
+      } & InfoSection)
+  >
 }
 
 export type Settings = {
@@ -192,6 +257,15 @@ export type Page = {
   heading: string
   subheading?: string
   pageBuilder?: Array<
+    | ({
+        _key: string
+      } & Hero)
+    | ({
+        _key: string
+      } & ImageGallery)
+    | ({
+        _key: string
+      } & RecentPosts)
     | ({
         _key: string
       } & CallToAction)
@@ -494,9 +568,13 @@ export type AllSanitySchemaTypes =
   | SanityImageAssetReference
   | CallToAction
   | InfoSection
+  | RecentPosts
+  | ImageGallery
+  | Hero
   | BlockContentTextOnly
   | BlockContent
   | Button
+  | Homepage
   | Settings
   | SanityImageCrop
   | SanityImageHotspot

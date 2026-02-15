@@ -1,4 +1,4 @@
-import {CogIcon} from '@sanity/icons'
+import {CogIcon, MenuIcon, BlockElementIcon, SearchIcon} from '@sanity/icons'
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import type {Link, Settings} from '../../../sanity.types'
 
@@ -14,23 +14,31 @@ export const settings = defineType({
   title: 'Settings',
   type: 'document',
   icon: CogIcon,
+  groups: [
+    {name: 'general', title: 'General', icon: CogIcon, default: true},
+    {name: 'header', title: 'Header', icon: MenuIcon},
+    {name: 'footer', title: 'Footer', icon: BlockElementIcon},
+    {name: 'seo', title: 'SEO', icon: SearchIcon},
+  ],
   fields: [
+    // ── General ──────────────────────────────────────────
     defineField({
       name: 'title',
-      description: 'This field is the title of your blog.',
-      title: 'Title',
+      description: 'The site title, shown in the header and browser tab.',
+      title: 'Site Title',
       type: 'string',
       initialValue: demo.title,
       validation: (rule) => rule.required(),
+      group: 'general',
     }),
     defineField({
       name: 'description',
-      description: 'Used on the Homepage',
+      description: 'A short site description for SEO and metadata.',
       title: 'Description',
       type: 'array',
       initialValue: demo.description,
+      group: 'general',
       of: [
-        // Define a minified block content field for the description. https://www.sanity.io/docs/block-content
         defineArrayMember({
           type: 'block',
           options: {},
@@ -115,11 +123,42 @@ export const settings = defineType({
         }),
       ],
     }),
+
+    // ── Header ───────────────────────────────────────────
+    defineField({
+      name: 'headerNav',
+      title: 'Navigation Links',
+      description: 'Links shown in the site header.',
+      type: 'array',
+      of: [{type: 'navItem'}],
+      group: 'header',
+    }),
+
+    // ── Footer ───────────────────────────────────────────
+    defineField({
+      name: 'footerText',
+      title: 'Footer Text',
+      description: 'Text shown in the footer (e.g. "En familieblog").',
+      type: 'string',
+      initialValue: 'En familieblog',
+      group: 'footer',
+    }),
+    defineField({
+      name: 'footerNav',
+      title: 'Footer Links',
+      description: 'Optional links shown in the footer.',
+      type: 'array',
+      of: [{type: 'navItem'}],
+      group: 'footer',
+    }),
+
+    // ── SEO ──────────────────────────────────────────────
     defineField({
       name: 'ogImage',
       title: 'Open Graph Image',
       type: 'image',
       description: 'Displayed on social cards and search engine results.',
+      group: 'seo',
       options: {
         hotspot: true,
         aiAssist: {

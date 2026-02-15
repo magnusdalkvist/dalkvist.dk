@@ -1,6 +1,23 @@
 import {defineQuery} from 'next-sanity'
 
-export const settingsQuery = defineQuery(`*[_type == "settings"][0]`)
+const navItemFields = /* groq */ `
+  label,
+  link {
+    ...,
+    "page": page->slug.current,
+    "post": post->slug.current
+  }
+`
+
+export const settingsQuery = defineQuery(`*[_type == "settings"][0]{
+  ...,
+  "headerNav": headerNav[]{
+    ${navItemFields}
+  },
+  "footerNav": footerNav[]{
+    ${navItemFields}
+  }
+}`)
 
 const postFields = /* groq */ `
   _id,
@@ -27,6 +44,57 @@ const linkFields = /* groq */ `
       }
 `
 
+const pageBuilderFields = /* groq */ `
+  "pageBuilder": pageBuilder[]{
+    ...,
+    _type == "callToAction" => {
+      ...,
+      button {
+        ...,
+        ${linkFields}
+      }
+    },
+    _type == "infoSection" => {
+      content[]{
+        ...,
+        markDefs[]{
+          ...,
+          ${linkReference}
+        }
+      }
+    },
+    _type == "hero" => {
+      ...,
+      button {
+        ...,
+        ${linkFields}
+      }
+    },
+    _type == "imageGallery" => {
+      ...,
+      images[]{
+        ...,
+        asset->
+      }
+    },
+    _type == "recentPosts" => {
+      ...,
+      "posts": *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) [0...12] {
+        ${postFields}
+      }
+    },
+  }
+`
+
+export const homepageQuery = defineQuery(`
+  *[_type == "homepage" && _id == "homepage"][0]{
+    _id,
+    _type,
+    title,
+    ${pageBuilderFields}
+  }
+`)
+
 export const getPageQuery = defineQuery(`
   *[_type == 'page' && slug.current == $slug][0]{
     _id,
@@ -35,25 +103,7 @@ export const getPageQuery = defineQuery(`
     slug,
     heading,
     subheading,
-    "pageBuilder": pageBuilder[]{
-      ...,
-      _type == "callToAction" => {
-        ...,
-        button {
-          ...,
-          ${linkFields}
-        }
-      },
-      _type == "infoSection" => {
-        content[]{
-          ...,
-          markDefs[]{
-            ...,
-            ${linkReference}
-          }
-        }
-      },
-    },
+    ${pageBuilderFields}
   }
 `)
 
@@ -98,4 +148,10 @@ export const postPagesSlugs = defineQuery(`
 export const pagesSlugs = defineQuery(`
   *[_type == "page" && defined(slug.current)]
   {"slug": slug.current}
+`)
+
+export const recentPostsQuery = defineQuery(`
+  *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) [0...$limit] {
+    ${postFields}
+  }
 `)

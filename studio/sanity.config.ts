@@ -16,6 +16,7 @@ import {
   type DocumentLocation,
 } from 'sanity/presentation'
 import {assist} from '@sanity/assist'
+import {media} from 'sanity-plugin-media'
 
 // Environment variables for project configuration
 const projectId = process.env.SANITY_STUDIO_PROJECT_ID || 'your-projectID'
@@ -47,7 +48,7 @@ function resolveHref(documentType?: string, slug?: string): string | undefined {
 // Main Sanity configuration
 export default defineConfig({
   name: 'default',
-  title: 'Sanity + Next.js Starter Template',
+  title: 'dalkvist.dk',
 
   projectId,
   dataset,
@@ -66,7 +67,7 @@ export default defineConfig({
         mainDocuments: defineDocuments([
           {
             route: '/',
-            filter: `_type == "settings" && _id == "siteSettings"`,
+            filter: `_type == "homepage" && _id == "homepage"`,
           },
           {
             route: '/:slug',
@@ -82,6 +83,11 @@ export default defineConfig({
           settings: defineLocations({
             locations: [homeLocation],
             message: 'This document is used on all pages',
+            tone: 'positive',
+          }),
+          homepage: defineLocations({
+            locations: [homeLocation],
+            message: 'This is the homepage',
             tone: 'positive',
           }),
           page: defineLocations({
@@ -123,6 +129,7 @@ export default defineConfig({
       structure, // Custom studio structure configuration, imported from ./src/structure.ts
     }),
     // Additional plugins for enhanced functionality
+    media(),
     unsplashImageAsset(),
     assist(),
     visionTool(),
