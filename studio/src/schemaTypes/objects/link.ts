@@ -41,6 +41,8 @@ export const link = defineType({
             return 'URL is required when Link Type is URL'
           }
           return true
+        }).uri({
+          scheme: ['http', 'https', 'mailto', 'tel'],
         }),
     }),
     defineField({
