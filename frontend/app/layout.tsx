@@ -69,6 +69,10 @@ const ibmPlexMono = IBM_Plex_Mono({
 export default async function RootLayout({children}: {children: React.ReactNode}) {
   const {isEnabled: isDraftMode} = await draftMode()
 
+  const {data: settings} = await sanityFetch({
+    query: settingsQuery,
+  })
+
   return (
     <html lang="en" className={`${inter.variable} ${ibmPlexMono.variable} bg-white text-black`}>
       <body>
@@ -84,7 +88,7 @@ export default async function RootLayout({children}: {children: React.ReactNode}
           )}
           {/* The <SanityLive> component is responsible for making all sanityFetch calls in your application live, so should always be rendered. */}
           <SanityLive onError={handleError} />
-          <Header />
+          <Header settings={settings} />
           <Analytics />
           <main className="">{children}</main>
           <Footer />
