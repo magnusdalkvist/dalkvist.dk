@@ -13,7 +13,9 @@ export default function Header({settings}: {settings: SettingsQueryResult}) {
 
   return (
     <header className="fixed z-50 h-24 inset-0">
-      <div className={`flex items-center backdrop-blur-lg border-b border-gray-100 h-full z-1 relative ${mobileMenuOpen ? 'bg-white' : 'bg-white/80 transition-colors delay-150'}`}>
+      <div
+        className={`flex items-center backdrop-blur-lg border-b border-gray-100 h-full z-1 relative ${mobileMenuOpen ? 'bg-white' : 'bg-white/80 transition-colors delay-150'}`}
+      >
         <div className="container py-6 px-2 sm:px-6">
           <div className="flex items-center justify-between gap-5 z-10">
             <Link className="flex items-center gap-2" href="/">
@@ -23,15 +25,12 @@ export default function Header({settings}: {settings: SettingsQueryResult}) {
             </Link>
 
             {headerNav.length > 0 && (
-              <nav className='pr-2'>
-                <div
-                  className="flex flex-col gap-1 md:hidden cursor-pointer"
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                >
-                  <div className="w-5 h-0.5 bg-black" />
-                  <div className="w-5 h-0.5 bg-black" />
-                  <div className="w-5 h-0.5 bg-black" />
-                </div>
+              <nav className="pr-2">
+                <button className={`hamburger hamburger--squeeze ${mobileMenuOpen ? 'is-active' : ''}`} type="button" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                  <span className="hamburger-box">
+                    <span className="hamburger-inner" />
+                  </span>
+                </button>
                 <ul
                   role="list"
                   className="items-center gap-4 md:gap-6 leading-5 text-sm tracking-tight hidden md:flex"
@@ -69,7 +68,7 @@ export default function Header({settings}: {settings: SettingsQueryResult}) {
             const href = linkResolver(item.link as DereferencedLink)
             if (!href) return null
             return (
-              <li key={index} className='pl-2'>
+              <li key={index} className="pl-2">
                 <Link
                   href={href}
                   target={item.link?.openInNewTab ? '_blank' : undefined}
