@@ -26,7 +26,7 @@ export default function Header({settings}: {settings: SettingsQueryResult}) {
 
             {headerNav.length > 0 && (
               <nav className="pr-2">
-                <button className={`hamburger hamburger--squeeze ${mobileMenuOpen ? 'is-active' : ''}`} type="button" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                <button className={`hamburger hamburger--squeeze md:hidden ${mobileMenuOpen ? 'is-active' : ''}`} type="button" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
                   <span className="hamburger-box">
                     <span className="hamburger-inner" />
                   </span>
